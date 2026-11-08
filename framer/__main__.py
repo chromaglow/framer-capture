@@ -72,6 +72,11 @@ def _send_show_to_running_instance() -> bool:
     from PySide6.QtNetwork import QLocalSocket
 
     app = QCoreApplication.instance() or QCoreApplication(sys.argv[:1])
+    # Let the running instance bring its window to the front (Windows otherwise blocks it).
+    try:
+        win32.user32.AllowSetForegroundWindow(-1)  # ASFW_ANY
+    except Exception:
+        pass
     sock = QLocalSocket()
     sock.connectToServer(SERVER_NAME)
     if sock.waitForConnected(1500):

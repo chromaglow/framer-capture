@@ -71,6 +71,15 @@ user32.GetWindowTextLengthW.argtypes = [wintypes.HWND]
 user32.GetWindowTextW.restype = ctypes.c_int
 user32.GetWindowTextW.argtypes = [wintypes.HWND, wintypes.LPWSTR, ctypes.c_int]
 user32.GetMonitorInfoW.restype = wintypes.BOOL
+user32.GetWindowThreadProcessId.restype = wintypes.DWORD
+user32.GetWindowThreadProcessId.argtypes = [wintypes.HWND, ctypes.c_void_p]
+user32.AttachThreadInput.restype = wintypes.BOOL
+user32.AttachThreadInput.argtypes = [wintypes.DWORD, wintypes.DWORD, wintypes.BOOL]
+user32.BringWindowToTop.argtypes = [wintypes.HWND]
+user32.SetActiveWindow.argtypes = [wintypes.HWND]
+user32.IsIconic.argtypes = [wintypes.HWND]
+user32.ShowWindow.argtypes = [wintypes.HWND, ctypes.c_int]
+kernel32.GetCurrentThreadId.restype = wintypes.DWORD
 kernel32.CreateMutexW.restype = wintypes.HANDLE
 kernel32.CreateMutexW.argtypes = [ctypes.c_void_p, wintypes.BOOL, wintypes.LPCWSTR]
 kernel32.CloseHandle.argtypes = [wintypes.HANDLE]
@@ -251,6 +260,44 @@ def set_foreground(hwnd: int) -> None:
             user32.SetForegroundWindow(hwnd)
         except Exception:
             pass
+
+
+def force_foreground(hwnd: int) -> bool:
+    """Bring a window of this process to the foreground even when another app is active.
+
+    Windows refuses SetForegroundWindow from a background process; attaching to the current
+    foreground thread's input queue lifts that restriction. Falls back to flashing the taskbar button.
+    """
+    if not hwnd:
+        return False
+    try:
+        SW_RESTORE = 9
+        if user32.IsIconic(hwnd):
+            user32.ShowWindow(hwnd, SW_RESTORE)
+        fg = user32.GetForegroundWindow()
+        my_tid = kernel32.GetCurrentThreadId()
+        fg_tid = user32.GetWindowThreadProcessId(fg, None) if fg else 0
+        attached = False
+        if fg_tid and fg_tid != my_tid:
+            attached = bool(user32.AttachThreadInput(my_tid, fg_tid, True))
+        try:
+            user32.BringWindowToTop(hwnd)
+            user32.SetForegroundWindow(hwnd)
+            user32.SetActiveWindow(hwnd)
+        finally:
+            if attached:
+                user32.AttachThreadInput(my_tid, fg_tid, False)
+        ok = user32.GetForegroundWindow() == hwnd
+        if not ok:
+            class FLASHWINFO(ctypes.Structure):
+                _fields_ = [("cbSize", wintypes.UINT), ("hwnd", wintypes.HWND), ("dwFlags", wintypes.DWORD),
+                            ("uCount", wintypes.UINT), ("dwTimeout", wintypes.DWORD)]
+            fi = FLASHWINFO(ctypes.sizeof(FLASHWINFO), hwnd, 0x3 | 0xC, 0, 0)  # FLASHW_ALL | FLASHW_TIMERNOFG
+            user32.FlashWindowEx(ctypes.byref(fi))
+        return ok
+    except Exception as exc:  # pragma: no cover
+        log.debug("force_foreground failed: %s", exc)
+        return False
 
 
 def get_window_title(hwnd: int) -> str:

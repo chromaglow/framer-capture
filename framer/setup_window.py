@@ -147,10 +147,10 @@ class SetupWindow(QWidget):
         row2 = QHBoxLayout()
         self.sp_number = QSpinBox()
         self.sp_number.setRange(1, 999999)
-        self.sp_number.setFixedWidth(110)
+        self.sp_number.setFixedWidth(120)
         self.sp_digits = QSpinBox()
         self.sp_digits.setRange(3, 6)
-        self.sp_digits.setFixedWidth(60)
+        self.sp_digits.setFixedWidth(76)
         row2.addWidget(self.sp_number)
         row2.addSpacing(12)
         lbl_d = QLabel("Digits")
@@ -434,3 +434,6 @@ class SetupWindow(QWidget):
         self.showNormal()
         self.raise_()
         self.activateWindow()
+        from . import win32
+
+        win32.force_foreground(int(self.winId()))
