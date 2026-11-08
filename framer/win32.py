@@ -4,6 +4,7 @@ from __future__ import annotations
 import atexit
 import ctypes
 import logging
+import os
 from ctypes import wintypes
 from dataclasses import dataclass
 
@@ -205,6 +206,8 @@ def make_tool_noactivate(hwnd: int) -> None:
 
 def exclude_from_capture(hwnd: int) -> bool:
     if not _HAS_DISPLAY_AFFINITY:
+        return False
+    if os.environ.get("FRAMER_NO_CAPTURE_EXCLUSION"):  # debug aid: lets screenshots show Framer's own windows
         return False
     try:
         ok = bool(user32.SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE))

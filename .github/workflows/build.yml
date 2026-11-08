@@ -1,0 +1,59 @@
+name: build
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install Python
+        run: uv python install 3.12
+
+      - name: Sync dependencies
+        run: uv sync
+
+      - name: Make Assets
+        run: uv run python scripts/make_assets.py
+
+      - name: Run Tests
+        run: uv run pytest
+
+      - name: Build EXE
+        run: uv run pyinstaller --noconfirm --clean framer.spec
+
+      - name: Self-test (CI subset)
+        continue-on-error: true
+        run: uv run python -m framer --self-test --ci
+
+      - name: Prepare Release Directory
+        run: |
+          New-Item -ItemType Directory -Force release | Out-Null
+          Copy-Item dist/Framer.exe release/Framer.exe
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Framer-exe
+          path: release/Framer.exe
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/Framer.exe

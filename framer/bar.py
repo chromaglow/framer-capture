@@ -21,7 +21,7 @@ from .geometry import (
 
 log = logging.getLogger(__name__)
 
-BAR_W, BAR_H = 300, 76
+BAR_W, BAR_H = 330, 76
 THUMB = 56
 GLYPH_FONT = "Segoe UI Symbol"
 
@@ -153,7 +153,7 @@ class FloatingBar(QWidget):
         row1.setSpacing(0)
         row2 = QHBoxLayout()
         row2.setSpacing(0)
-        self.btn_capture = _glyph_button("◉", "Capture (F9)")
+        self.btn_capture = _glyph_button("●", "Capture (F9)")
         self.btn_reframe = _glyph_button("⛶", "Reframe (F8)")
         self.btn_undo = _glyph_button("↶", "Undo last capture (moves it to the Recycle Bin)")
         self.btn_folder = _glyph_button("🗀", "Open output folder")
@@ -192,7 +192,7 @@ class FloatingBar(QWidget):
 
     def set_info(self, prefix: str, next_label: str, saved: int, frame: Rect | None) -> None:
         fm = self.lbl_prefix.fontMetrics()
-        self.lbl_prefix.setText(fm.elidedText(prefix, Qt.TextElideMode.ElideMiddle, 150))
+        self.lbl_prefix.setText(fm.elidedText(prefix, Qt.TextElideMode.ElideMiddle, 160))
         self.lbl_prefix.setToolTip(prefix)
         self.lbl_counts.setText(f"Next: {next_label} · Saved: {saved}")
         self.lbl_size.setText(f"{frame.width} × {frame.height} px" if frame else "")

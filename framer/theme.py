@@ -62,7 +62,6 @@ QLineEdit, QSpinBox, QComboBox {{
 QLineEdit:focus, QSpinBox:focus {{ border: 1px solid {ACCENT}; }}
 QLineEdit[invalid="true"] {{ border: 1px solid {ERROR}; }}
 QLineEdit:read-only {{ color: {TEXT_MUTED}; }}
-QSpinBox::up-button, QSpinBox::down-button {{ width: 16px; background: {PANEL}; border: none; }}
 QPushButton {{
     background: {PANEL_RAISED};
     border: 1px solid {BORDER_LINE};
@@ -92,7 +91,22 @@ QPushButton#bar {{
 }}
 QPushButton#bar:hover {{ background: {PANEL_RAISED}; }}
 QPushButton#bar:disabled {{ color: {BORDER_LINE}; }}
-QCheckBox, QRadioButton {{ background: transparent; spacing: 6px; }}
+QCheckBox, QRadioButton {{ background: transparent; spacing: 8px; }}
+QCheckBox::indicator, QRadioButton::indicator {{
+    width: 14px; height: 14px;
+    background: {PANEL_RAISED};
+    border: 1px solid {TEXT_MUTED};
+}}
+QCheckBox::indicator {{ border-radius: 3px; }}
+QRadioButton::indicator {{ border-radius: 8px; }}
+QCheckBox::indicator:checked, QRadioButton::indicator:checked {{
+    background: {ACCENT};
+    border: 1px solid {ACCENT};
+}}
+QRadioButton::indicator:checked {{
+    background: qradialgradient(cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0.45 {BG}, stop:0.55 {ACCENT});
+}}
+QCheckBox::indicator:hover, QRadioButton::indicator:hover {{ border: 1px solid {ACCENT}; }}
 QSlider::groove:horizontal {{ height: 4px; background: {PANEL_RAISED}; border-radius: 2px; }}
 QSlider::handle:horizontal {{ width: 14px; margin: -6px 0; background: {ACCENT}; border-radius: 7px; }}
 QProgressBar {{ background: {PANEL_RAISED}; border: none; border-radius: 4px; height: 8px; text-align: center; }}

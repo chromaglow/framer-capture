@@ -185,6 +185,8 @@ class SetupWindow(QWidget):
         qrow.addWidget(self.sl_quality, 1)
         qrow.addWidget(self.lbl_quality)
         f_out.addRow("Quality", self.quality_row)
+        self._f_out = f_out
+        self._quality_row_index = f_out.rowCount() - 1
         root.addWidget(g_out)
 
         # Options
@@ -269,7 +271,7 @@ class SetupWindow(QWidget):
         (self.rb_png if s["format"] == "png" else self.rb_jpg).setChecked(True)
         self.sl_quality.setValue(s["jpg_quality"])
         self.lbl_quality.setText(str(s["jpg_quality"]))
-        self.quality_row.setVisible(s["format"] == "jpg")
+        self._set_quality_visible(s["format"] == "jpg")
         self.cb_sound.setChecked(s["sound"])
         self.cb_dup.setChecked(s["duplicate_guard"])
         self.cb_remember.setChecked(s["remember_frame"])
@@ -278,6 +280,9 @@ class SetupWindow(QWidget):
         self._loading = False
         self.rescan_numbering(user_number=None)
         self.refresh_last_frame_button()
+
+    def _set_quality_visible(self, visible: bool) -> None:
+        self._f_out.setRowVisible(self._quality_row_index, visible)
 
     def rescan_numbering(self, user_number: int | None = None) -> None:
         """Folder scan -> next number spin; respects a higher user-chosen number."""
@@ -373,7 +378,7 @@ class SetupWindow(QWidget):
         if self._loading:
             return
         self.settings.set("format", "png" if png_checked else "jpg")
-        self.quality_row.setVisible(not png_checked)
+        self._set_quality_visible(not png_checked)
         self._refresh_preview()
         self.controller.on_settings_changed("format")
 

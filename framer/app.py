@@ -219,8 +219,9 @@ class FramerApp(QObject):
             init_mon = self.table.by_device(init_mon.device) or init_mon
             if frame_fits(init_rect, [init_mon]) is None:
                 init_rect, init_mon = None, None
-        delay = 160 if was_framing else 60
-        QTimer.singleShot(delay, lambda: self.selector.open(init_rect, init_mon))
+        # Let the compositor actually remove our windows before the snapshot is taken.
+        del was_framing
+        QTimer.singleShot(220, lambda: self.selector.open(init_rect, init_mon))
 
     def _on_frame_confirmed(self, rect: Rect, mon: Monitor) -> None:
         changed = rect != self.frame or (self.frame_mon is not None and mon.device != self.frame_mon.device)

@@ -61,13 +61,20 @@ class Toast(QWidget):
             pw, ph = int(round(w * scale)), int(round(h * scale))
             gap = int(round(6 * scale))
             if anchor is not None:
-                below = Rect(anchor.left + (anchor.width - pw) // 2, anchor.bottom + gap, pw, ph)
-                above = Rect(anchor.left + (anchor.width - pw) // 2, anchor.top - gap - ph, pw, ph)
-                target = fit_rect_in_bounds(below, mon.phys)
-                if avoid is not None and target.intersects(avoid):
-                    alt = fit_rect_in_bounds(above, mon.phys)
-                    if not alt.intersects(avoid):
-                        target = alt
+                cx = anchor.left + (anchor.width - pw) // 2
+                candidates = [
+                    Rect(cx, anchor.bottom + gap, pw, ph),            # centered below
+                    Rect(anchor.left, anchor.bottom + gap, pw, ph),   # left-aligned below
+                    Rect(cx, anchor.top - gap - ph, pw, ph),          # centered above
+                    Rect(anchor.left, anchor.top - gap - ph, pw, ph), # left-aligned above
+                ]
+                target = fit_rect_in_bounds(candidates[0], mon.phys)
+                if avoid is not None:
+                    for c in candidates:
+                        fitted = fit_rect_in_bounds(c, mon.phys)
+                        if not fitted.intersects(avoid):
+                            target = fitted
+                            break
             else:
                 target = Rect(mon.phys.left + (mon.phys.width - pw) // 2, mon.phys.top + int(80 * scale), pw, ph)
             lg = physical_rect_to_logical_rounded(mon, target)
