@@ -3,6 +3,9 @@ name = "framer"
 version = "1.0.0"
 description = "Framer - frame once, press one key per page. Windows repeat-frame screen capture."
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Ezra Shively-Stjarna" }]
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "PySide6>=6.7,<7",

@@ -6,7 +6,7 @@ Framer captures the same rectangle of your screen every time you press one key, 
 
 ## Getting it
 
-1. Take `Framer.exe` from the `release` folder (or from the GitHub Release page) and put it anywhere you like. The Desktop is fine.
+1. Download `Framer.exe` from the latest release at https://github.com/chromaglow/framer-capture/releases (or take it from the `release` folder of a local build) and put it anywhere you like. The Desktop is fine.
 2. Double-click it. The Setup window opens. Nothing else to install.
 
 **The first time**, Windows may show a blue "Windows protected your PC" box because the program is not signed. Click **More info**, then **Run anyway**. Windows only asks once.
@@ -76,3 +76,18 @@ Images go into the PDF as they are, without recompression. Page size follows the
 - On HDR displays the colors in a capture can differ slightly from what you see on screen.
 - The frame must sit on one monitor. If you drag across two, Framer keeps it on the monitor where you started.
 - Framer does not turn pages, scroll, or read file formats. It captures pixels; the other program does the rest.
+- Windows only (10 version 2004 or newer, and 11).
+
+## For developers
+
+Python 3.12, PySide6, `mss`, Pillow, `img2pdf`; built with `uv` and PyInstaller. Start with `DEVELOPMENT.md` (architecture, coordinate model, tests, release steps, gotchas), then `FRAMER_SPEC.md` for the intended behavior and `DECISIONS.md` for the judgment calls. Quick start:
+
+```
+uv sync
+uv run pytest
+uv run python -m framer
+```
+
+## License
+
+MIT. See `LICENSE`.

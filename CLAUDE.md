@@ -1,24 +1,21 @@
 # Framer — instructions for Claude Code
 
-This folder (`C:\dev\GitHub\framer`) is the repo for **Framer**, a Windows repeat-frame screen capture app.
+This folder is the repo for **Framer**, a Windows repeat-frame screen capture app (frame once, press F9 per page). The MVP shipped as v1.0.0 on 2026-11-08 and works on the owner's machine.
 
-## Your task
-Build the complete MVP described in **`FRAMER_SPEC.md`** in this folder. Read the whole spec before writing code. It is the single source of truth.
+## Start here
+1. `docs/NOW.md` — current status and open items.
+2. `DEVELOPMENT.md` — architecture, coordinate model, tests, release process, gotchas. Read §5 before touching windows, DPI or packaging.
+3. `FRAMER_SPEC.md` — the original specification; still the source of truth for intended behavior.
+4. `DECISIONS.md` — every judgment call so far; append one line per new one.
 
 ## How to work
-- **Work autonomously. Do not ask the owner questions.** Every product decision is already in the spec. When something is ambiguous or blocked, choose the simplest option that meets the spec's Acceptance Criteria (§14), log it as one line in `DECISIONS.md`, and continue.
-- Follow the milestones in spec §15 in order. Run the tests and make a git commit at the end of each milestone.
-- If this folder is not yet a git repo, run `git init` (default branch `main`) first.
-- If `gh` is authenticated, create a **private** GitHub repo named `framer` under the authenticated account, add it as `origin`, push, and set up the workflow in spec §12.4. If `gh` is not available or not authenticated, skip the remote and build locally; note it in `DECISIONS.md`.
-- You are on Windows: build the exe locally (spec §12.4) and place it at `release\Framer.exe`.
-- The owner does not use a terminal. The finished product must run by double-clicking `release\Framer.exe`, with no setup steps.
-- No telemetry, no network calls in the app, no auto-update.
+- Work autonomously; the owner does not use a terminal and should never need one. Anything they run must be a double-click.
+- Run `uv run pytest` after changes; run `scripts\ui_harness.py` when you touch the selector, border, bar, toast, hotkeys or capture path; run `scripts\build.ps1` + `scripts\exe_smoke_test.py` before tagging a release.
+- Commit per logical step; tag `vX.Y.Z` to release (CI builds and attaches the exe).
+- Colors come from `framer/theme.py` roles only. No network, telemetry, auto-update or admin, ever.
+- `uv` lives at `%LOCALAPPDATA%\Microsoft\WinGet\Links` (not on Git Bash's PATH).
 
-## Definition of done
-1. All automated tests pass (spec §14.1).
-2. `release\Framer.exe --self-test` exits 0 (spec §13).
-3. The self-check list in spec §14.2 is completed and results are recorded in `DECISIONS.md`.
-4. `README.md` is written for the owner in plain language (spec §16).
-5. Final commit made (and tagged `v1.0.0` / pushed if a remote exists).
-
-When done, print a short summary: where the exe is, test results, and any deviations from the spec.
+## Repos
+- Private: https://github.com/chromaglow/framer (origin)
+- Public, MIT: https://github.com/chromaglow/framer-capture (remote `public`)
+Push both.

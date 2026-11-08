@@ -28,6 +28,10 @@ Format: `- [milestone] decision — reason`
 - [M7] `%APPDATA%\Framer` already existed on the build machine, created by an unrelated Electron app that is also called Framer (Cache, Crashpad, sentry folders). Framer's files (`settings.json`, `framer.log`, `selftest.txt`) sit next to them without conflict; the spec fixes this path, so it was kept.
 - [M7] Build tooling: `uv` was not installed on the build machine; installed with `winget install --id astral-sh.uv -e` as the spec allows; Python 3.12.16 via `uv python install 3.12`.
 
+- [post-1.0] Owner tried v1.0.0 on real documents on 2026-11-08 and confirmed it works; no changes requested.
+- [post-1.0] Published a public mirror under the MIT license as `chromaglow/framer-capture` (the name `framer` alone collides with the well-known design tool); the private `chromaglow/framer` stays as `origin`. Both get every push.
+- [post-1.0] The UI harness and exe smoke test used during the build are now in `scripts/` (`ui_harness.py`, `exe_smoke_test.py`) so the next person can re-verify the real windows, not just the pure logic.
+
 ## Deviations from spec
 
 - None that reduce scope. (The `winsound` sound path, bar width and Setup height are listed above as allowed choices.)

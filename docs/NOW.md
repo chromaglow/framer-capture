@@ -1,26 +1,30 @@
 # Framer — where things stand
 
-_Last refreshed: 2026-11-08 (first build session)._
+_Last refreshed: 2026-11-08, after the owner's hands-on check of v1.0.0._
 
 ## Status
 
-- ✅ MVP per `FRAMER_SPEC.md` implemented: Setup window, frame selector (per-monitor overlays, loupe, handles, nudge), border strips, floating bar, toasts, tray, global hotkeys (F8/F9), capture pipeline (mss → ordered save queue, duplicate guard, CSV log, undo to Recycle Bin), Make PDF, settings, crash handler, single instance.
-- ✅ 67 unit tests pass (`uv run pytest`).
-- ✅ `release\Framer.exe` built with PyInstaller (one-file, windowed, PerMonitorV2 manifest, icon, version info); `Framer.exe --self-test` exits 0.
-- ✅ End-to-end harness (scratch script, not in repo) drove the real app on the 3-monitor mixed-DPI setup: border strips land pixel-exact, captures are exactly the frame size, duplicate guard / override / undo / reframe / PDF all behave.
-- ✅ Private GitHub repo `chromaglow/framer`; CI run for tag `v1.0.0` succeeded on `windows-latest` (all steps green, including the CI-subset self-test) and attached `Framer.exe` to the GitHub Release https://github.com/chromaglow/framer/releases/tag/v1.0.0.
+- ✅ **v1.0.0 shipped and confirmed working by the owner** on real documents (three-monitor, mixed-DPI machine).
+- ✅ MVP per `FRAMER_SPEC.md`: Setup window, frame selector (per-monitor overlays, loupe, handles, nudge), border strips, floating bar, toasts, tray, global hotkeys (F8/F9), capture pipeline (mss → ordered save queue, duplicate guard, CSV log, undo to Recycle Bin), Make PDF, settings, crash handler, single instance.
+- ✅ 67 unit tests (`uv run pytest`), 7-step `--self-test`, UI harness and exe smoke test all pass (`scripts/`).
+- ✅ `release\Framer.exe` (PyInstaller one-file, windowed, PerMonitorV2 manifest, icon, version info).
+- ✅ Private repo `chromaglow/framer` (origin). CI for tag `v1.0.0` green on `windows-latest`; exe attached to the release.
+- ✅ Public MIT mirror `chromaglow/framer-capture` (remote `public`); same CI, same release.
 
-## How to build again
+## Pick-up checklist
 
-Run `scripts\build.ps1` in PowerShell (installs uv if needed, syncs, makes assets, tests, PyInstaller, copies to `release\`, runs the exe self-test).
+1. Read `DEVELOPMENT.md` (architecture + gotchas), then skim `DECISIONS.md`.
+2. `uv sync && uv run pytest`.
+3. For UI work: `uv run python -m framer`, then `scripts\ui_harness.py` (see DEVELOPMENT §3).
+4. To release: bump version in three places (DEVELOPMENT §4), `scripts\build.ps1`, `scripts\exe_smoke_test.py`, tag, push to both remotes.
 
 ## Things worth knowing
 
-- Qt 6.12 reports friendly monitor names from `QScreen.name()`, so Win32 monitors are matched to Qt screens by geometry (see `framer/geometry.py::match_screens`).
-- `WDA_EXCLUDEFROMCAPTURE` hides Framer's own windows even from `mss`/BitBlt screenshots. Set `FRAMER_NO_CAPTURE_EXCLUSION=1` when you need screenshots that show the border/bar.
-- `%APPDATA%\Framer` is shared with an unrelated Electron app named Framer; our files are `settings.json`, `framer.log`, `selftest.txt`.
+- Qt 6.12 reports friendly monitor names from `QScreen.name()`; Win32 monitors are matched to Qt screens by geometry (`framer/geometry.py::match_screens`).
+- `WDA_EXCLUDEFROMCAPTURE` hides Framer's own windows even from `mss`/BitBlt screenshots. Set `FRAMER_NO_CAPTURE_EXCLUSION=1` for screenshots that should show the border/bar.
+- `%APPDATA%\Framer` is shared with an unrelated Electron app named Framer; ours are `settings.json`, `framer.log`, `selftest.txt`.
+- The exe is unsigned; SmartScreen asks once per machine.
 
 ## Open / next
 
-- v2 candidates are listed in spec §17 (auto page-turn, scrolling capture, OCR, installer, code signing).
-- A manual pass by the owner over spec §14.2 on real documents is the remaining human check (everything automatable was automated).
+- Nothing open for v1. v2 candidates: spec §17 (auto page-turn, scrolling capture/stitching, OCR, window-snap framing, installer, code signing).
