@@ -30,6 +30,7 @@ Format: `- [milestone] decision — reason`
 
 - [post-1.0] Owner tried v1.0.0 on real documents on 2026-11-08 and confirmed it works; no changes requested.
 - [post-1.0] Published a public mirror under the MIT license as `chromaglow/framer-capture` (the name `framer` alone collides with the well-known design tool); the private `chromaglow/framer` stays as `origin`. Both get every push.
+- [post-1.0] v1.0.1 = v1.0.0 plus LICENSE, developer docs and harness scripts (no code change). Cut because the public repo did not run the workflow for a tag pushed together with the initial branch, and direct release creation is blocked for the builder; a fresh tag push triggers the release build.
 - [post-1.0] The UI harness and exe smoke test used during the build are now in `scripts/` (`ui_harness.py`, `exe_smoke_test.py`) so the next person can re-verify the real windows, not just the pure logic.
 
 ## Deviations from spec

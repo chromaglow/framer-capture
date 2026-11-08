@@ -48,7 +48,7 @@ def framer_pids():
 
 
 def find_setup():
-    return u.FindWindowW(None, "Framer 1.0.0")
+    return u.FindWindowW(None, "Framer 1.0.1")
 
 
 # 3. launch

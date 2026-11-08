@@ -1,6 +1,6 @@
 [project]
 name = "framer"
-version = "1.0.0"
+version = "1.0.1"
 description = "Framer - frame once, press one key per page. Windows repeat-frame screen capture."
 readme = "README.md"
 license = "MIT"
