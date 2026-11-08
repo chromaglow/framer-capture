@@ -10,7 +10,7 @@ VSVersionInfo(
     date=(0, 0)
   ),
   kids=[
-    StringFileInfo(
+    StringFileInfo([
       StringTable(
         '040904B0',
         [
@@ -24,12 +24,12 @@ VSVersionInfo(
           StringStruct('ProductVersion', '1.0.0')
         ]
       )
-    ),
-    VarFileInfo(
+    ]),
+    VarFileInfo([
       VarStruct(
         'Translation',
         [1033, 1200]
       )
-    )
+    ])
   ]
 )

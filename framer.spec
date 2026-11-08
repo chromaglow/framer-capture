@@ -23,7 +23,7 @@ QT_EXCLUDES = [
 ]
 
 a = Analysis(
-    [str(ROOT / "framer" / "__main__.py")],
+    [str(ROOT / "framer_launcher.py")],
     pathex=[str(ROOT)],
     binaries=[],
     datas=[
