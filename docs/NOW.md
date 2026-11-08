@@ -9,7 +9,8 @@ _Last refreshed: 2026-11-08, after the owner's hands-on check of v1.0.0._
 - ✅ 67 unit tests (`uv run pytest`), 7-step `--self-test`, UI harness and exe smoke test all pass (`scripts/`).
 - ✅ `release\Framer.exe` (PyInstaller one-file, windowed, PerMonitorV2 manifest, icon, version info).
 - ✅ Private repo `chromaglow/framer` (origin). CI for tag `v1.0.0` green on `windows-latest`; exe attached to the release.
-- ✅ Public MIT mirror `chromaglow/framer-capture` (remote `public`); same CI, same release.
+- ✅ Public MIT mirror `chromaglow/framer-capture` (remote `public`). **Current release: v1.0.1** (same code as 1.0.0 plus license, docs, harness scripts), built by CI on both repos: https://github.com/chromaglow/framer-capture/releases/tag/v1.0.1
+- ℹ️ `releaseFramer.exe` in the working tree may still be the 1.0.0 build if a Framer instance was running during the 1.0.1 build (the file was locked); `distFramer.exe` and the GitHub releases are 1.0.1. Re-run `scriptsbuild.ps1` after quitting Framer to refresh it.
 
 ## Pick-up checklist
 
