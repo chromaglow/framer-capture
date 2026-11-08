@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+*.egg-info/
+
+# Build
+build/
+dist/
+release/
+*.spec.bak
+
+# Generated assets
+framer/assets/framer.ico
+framer/assets/click.wav
+
+# OS / editors
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Claude Code local settings
+.claude/settings.local.json
