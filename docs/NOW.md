@@ -8,7 +8,7 @@ _Last refreshed: 2026-11-08 (first build session)._
 - ✅ 67 unit tests pass (`uv run pytest`).
 - ✅ `release\Framer.exe` built with PyInstaller (one-file, windowed, PerMonitorV2 manifest, icon, version info); `Framer.exe --self-test` exits 0.
 - ✅ End-to-end harness (scratch script, not in repo) drove the real app on the 3-monitor mixed-DPI setup: border strips land pixel-exact, captures are exactly the frame size, duplicate guard / override / undo / reframe / PDF all behave.
-- ✅ Private GitHub repo `chromaglow/framer`, workflow `.github/workflows/build.yml` builds on tag `v*`.
+- ✅ Private GitHub repo `chromaglow/framer`; CI run for tag `v1.0.0` succeeded on `windows-latest` (all steps green, including the CI-subset self-test) and attached `Framer.exe` to the GitHub Release https://github.com/chromaglow/framer/releases/tag/v1.0.0.
 
 ## How to build again
 
